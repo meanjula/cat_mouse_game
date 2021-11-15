@@ -26,9 +26,9 @@ p {
   width: 15rem;
   margin: 3rem 2rem;
   border-radius: 50%;
-  background-color: aqua;
   text-align: center;
   display: flex;
+  background-color: tomato;
   justify-content: center;
   align-items: center;
 }
@@ -48,4 +48,10 @@ button {
 }
 .startBtn {
   margin-right: 2rem;
+}
+.circle.active {
+  /* background: url("images/cat.jpg") no-repeat;
+  background-repeat: no-repeat;
+  background-size: cover; */
+  background: turquoise;
 }

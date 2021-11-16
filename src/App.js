@@ -1,67 +1,122 @@
+import "./App.css";
+import React, { Component } from "react";
+import { circles } from "./circleData";
+import Circle from "./components/Circle";
+import GameOver from "./components/GameOver";
+import startSound from "./assets/sounds/gameoverSound.mp3";
+import endSound from "./assets/sounds/catmew.ogg";
 
-import './App.css';
-import React, { Component } from 'react';
-import {circles} from './components/circleData';
-import Circle from './components/Circle';
-import GameOver from './components/GameOver';
+let gameoverSound = new Audio(endSound);
+let gamestartSound = new Audio(startSound);
 
 const getRndInteger = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 class App extends Component {
-  state={
-    score:0,
-    current:0,
-    gameOver:false,
+  state = {
+    score: 0,
+    current: 0,
+    gameOver: false,
+    pace: 1500,
+    rounds: 0,
+    gameStart: false,
   };
+  //round is how many highlights we get
   timer = undefined;
-  pace = 1500;
-
-  handleClick=()=>{
+  //to check the right click
+  clickHandler = (id) => {
+    console.log("you clicked:", id);
+    if (this.state.current !== id) {
+      this.stopHandler();
+      return;
+    }
     this.setState({
-      count:this.state.score + 10,
-    })
-  }
+      score: this.state.score + 10,
+      rounds: 0, //clickhandler setstate clear rounds if user click circle
+    });
+  };
+
+  //every new circle is
   //get random circle with random number and do while loop
-  nextCircle =()=>{
+  nextCircle = () => {
+    if (this.state.rounds >= 5) {
+      this.stopHandler();
+      return;
+    }
     let nextActive;
-    do{
-      nextActive=getRndInteger(1,4) //randomly selecting another circle
-    }while(nextActive=== this.state.current)
-    this.setState({current:nextActive})
+    do {
+      nextActive = getRndInteger(1, 4); //randomly selecting another circle
+    } while (nextActive === this.state.current);
 
-    this.pace *= 0.95;
-    this.timer=setTimeout(this.nextCircle, this.pace)
+    this.setState({
+      current: nextActive,
+      pace: this.state.pace * 0.95,
+      rounds: this.state.rounds + 1,
+    });
+
+    this.timer = setTimeout(this.nextCircle, this.state.pace);
     console.log("active circle is ", this.state.current);
-  }
-  startHandler = () =>{
-    this.nextCircle()
+    console.log("round number ", this.state.rounds);
   };
 
-  stopHandler = () =>{
-    clearTimeout(this.timer);
-    this.setState({gameOver:true});
+  startHandler = () => {
+    gamestartSound.play();
+    this.nextCircle();
+    this.setState({
+      gameStart: true,
+    });
   };
+
+  stopHandler = () => {
+    gamestartSound.pause();
+    gameoverSound.play();
+    clearTimeout(this.timer);
+    this.setState({
+      gameOver: true,
+      current: 0,
+      gameStart: false,
+    });
+  };
+
+  closeHandler = () => {
+    this.setState({
+      gameOver: false,
+      score: 0,
+      pace: 1500,
+      rounds: 0,
+    });
+  };
+
   render() {
     return (
       <div className="App">
-        {this.state.gameOver && <GameOver score={this.state.score}/>}
-        <h1>CatMouse Game</h1>
-        <p>Your score</p>
+        {this.state.gameOver && (
+          <GameOver score={this.state.score} close={this.closeHandler} />
+        )}
+        <h1>Feed the Cat</h1>
+        <p>Your score: {this.state.score}</p>
         <div className="circles">
-        {circles.map(c =>(
-          <Circle 
-          key={c.id} 
-          color={c.color} 
-          id={c.id}   
-          onClick={this.handleClick}
-          active={this.state.current===c.id}/>
-        ))}
+          {circles.map((c) => (
+            <Circle
+              key={c.id}
+              color={c.color}
+              id={c.id}
+              click={() => this.clickHandler(c.id)} //binding data and sending data as props to clickhandler
+              active={this.state.current === c.id}
+              disabled={this.state.gameStart}
+            />
+          ))}
         </div>
-        <button className="startBtn" onClick={this.startHandler}>Start</button>
+        <button
+          disabled={this.state.gameStart}
+          className="startBtn"
+          onClick={this.startHandler}
+        >
+          Start
+        </button>
         <button onClick={this.stopHandler}>Stop</button>
-    </div>
+      </div>
     );
   }
 }

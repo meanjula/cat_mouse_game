@@ -2,6 +2,8 @@
 
 This is the cat game created using react app. Two buttons are added to start and end the game. Four circles are created with different colors and id. When player start the game with start button random circle gets activated and user should click on that activated circle to get the points. When player misses the several click pop up window with game over is displayed.
 
+- [Deployed app in netlify](https://priceless-roentgen-f4e83a.netlify.app)
+
 ## installation
 
 Run this command: npx create-react-app catMouse-app.
@@ -20,8 +22,6 @@ creates four circle with unique id and color.
 
 Component that creates popup window with game over text and final score.
 
-## Assets
-
 ### Images
 
 Background svg image for the selected circle is created using figma's fontawesome font.
@@ -30,7 +30,7 @@ Background svg image for the selected circle is created using figma's fontawesom
 
 game start sound, game end and click sound are stored here which are played when game starts, game ends and player click the right circle.
 
-## Screenshot![screenshot of game on](./src/assets/images/gameon.png) ![screenshot of game over](./src/assets/images/gameover.png)
+## Screenshot![screenshot of game](src/assets/images/screenshot.png)
 
 ## Sources
 

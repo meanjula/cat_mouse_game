@@ -26,11 +26,11 @@ class App extends Component {
   timer = undefined;
   //to check the right click
   clickHandler = (id) => {
-    console.log("you clicked:", id);
     if (this.state.current !== id) {
       this.stopHandler();
       return;
     }
+
     this.setState({
       score: this.state.score + 10,
       rounds: 0, //clickhandler setstate clear rounds if user click circle
@@ -56,13 +56,14 @@ class App extends Component {
     });
 
     this.timer = setTimeout(this.nextCircle, this.state.pace);
-    console.log("active circle is ", this.state.current);
-    console.log("round number ", this.state.rounds);
+    // console.log("active circle is ", this.state.current);
+    // console.log("round number ", this.state.rounds);
   };
 
   startHandler = () => {
     gamestartSound.play();
     this.nextCircle();
+
     this.setState({
       gameStart: true,
     });
@@ -72,9 +73,11 @@ class App extends Component {
     gamestartSound.pause();
     gameoverSound.play();
     clearTimeout(this.timer);
+
     this.setState({
       gameOver: true,
       current: 0,
+      emptyRounds: 0,
       gameStart: false,
     });
   };
@@ -84,16 +87,12 @@ class App extends Component {
       gameOver: false,
       score: 0,
       pace: 1500,
-      rounds: 0,
     });
   };
 
   render() {
     return (
       <div className="App">
-        {this.state.gameOver && (
-          <GameOver score={this.state.score} close={this.closeHandler} />
-        )}
         <h1>Feed the Cat</h1>
         <p>Your score: {this.state.score}</p>
         <div className="circles">
@@ -113,9 +112,12 @@ class App extends Component {
           className="startBtn"
           onClick={this.startHandler}
         >
-          Start
+          START
         </button>
-        <button onClick={this.stopHandler}>Stop</button>
+        <button onClick={this.stopHandler}>STOP</button>
+        {this.state.gameOver && (
+          <GameOver score={this.state.score} close={this.closeHandler} />
+        )}
       </div>
     );
   }

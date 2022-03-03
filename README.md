@@ -2,7 +2,7 @@
 
 This is the cat game created using react app. Two buttons are added to start and end the game. Four circles are created with different colors and id. When player start the game with start button random circle gets activated and user should click on that activated circle to get the points. When player misses the several click pop up window with game over is displayed.
 
-- [Deployed app in netlify](https://priceless-roentgen-f4e83a.netlify.app)
+- [Deployed app in netlify](https://feed-the-cat-fish.netlify.app)
 
 ## installation
 

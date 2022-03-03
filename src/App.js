@@ -17,10 +17,10 @@ class App extends Component {
   state = {
     score: 0,
     current: 0,
-    gameOver: false,
     pace: 1500,
     rounds: 0,
     gameStart: false,
+    gameOver: false,
   };
   //round is how many highlights we get
   timer = undefined;
@@ -63,22 +63,21 @@ class App extends Component {
   startHandler = () => {
     gamestartSound.play();
     this.nextCircle();
-
     this.setState({
       gameStart: true,
     });
+    gameoverSound.pause();
   };
 
   stopHandler = () => {
     gamestartSound.pause();
     gameoverSound.play();
     clearTimeout(this.timer);
-
     this.setState({
-      gameOver: true,
       current: 0,
       emptyRounds: 0,
       gameStart: false,
+      gameOver: true,
     });
   };
 
@@ -86,8 +85,11 @@ class App extends Component {
     this.setState({
       gameOver: false,
       score: 0,
+      rounds: 0,
       pace: 1500,
+      gameStart: false,
     });
+    gameoverSound.pause();
   };
 
   render() {
